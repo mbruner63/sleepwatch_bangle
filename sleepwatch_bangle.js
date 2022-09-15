@@ -339,13 +339,10 @@ onScreenTouched();
 });
 
 Bangle.on('swipe', function(direction) {
- /* console.log(direction);
-  console.log(menuDisabled);*/
+
 if (menuDisabled == false) {
-/*if (!timeForReactionsHasElapsed){
-    cancelTest = true;
-    onReactionGameCompleted();}*/
-menuMain();}
+menuMain();
+}
 });
 
 //--------------------------------------
@@ -415,6 +412,10 @@ var dzCalculated;
 var dzList = [];
 var z_zcm = 0;
 var window_size = 4;
+var x_thresh = 0.025;
+var y_thresh = 0.03;
+var z_thresh = 0.03;
+
 
 var bpmMax = 0;
 //-------------------------------------
@@ -430,54 +431,66 @@ var dxFilter = () => {
 };
 
 var dxWindow = () => {
-    if (dxList.length == 3) {
-        dxSum = dxList[0] + dxList[1] + dxList[2];
-        dxCalculated = dxSum / 3;
+  var i;
+    if (dxList.length == window_size) {
+      for(i=0;i<window_size;i++){
+        dxSum = dxList[i];
+        dxCalculated = dxSum / window_size;
+      }
     }
 };
 
 var dyFilter = () => {
-    if (dyList.length > 3) {
+    if (dyList.length > window_size) {
         dyList.shift();
     }
     dyWindow();
 };
 
 var dyWindow = () => {
-    if (dyList.length == 3) {
-        dySum = dyList[0] + dyList[1] + dyList[2];
-        dyCalculated = dySum / 3;
+  var i;
+    if (dyList.length == window_size) {
+      for(i=0;i<window_size;i++){
+        dySum = dyList[i];
+        dyCalculated = dySum / window_size;
+      }
     }
 };
 
 var dzFilter = () => {
-    if (dzList.length > 3) {
+    if (dzList.length > window_size) {
         dzList.shift();
     }
     dzWindow();
 };
 
 var dzWindow = () => {
-    if (dzList.length == 3) {
-        dzSum = dzList[0] + dzList[1] + dzList[2];
-        dzCalculated = dzSum / 3;
+  var i;
+    if (dzList.length == window_size) {
+      for(i=0;i<window_size;i++){
+        dzSum = dzList[i];
+        dzCalculated = dzSum / window_size;
+      }
     }
 };
 
 //---------X, Y, Z Buisness Logic------
 
 var xChange = (v) => {
+  //console.log(v);
     dx = v - lastX;
     lastX = v;
     xsample_counter++;
     dxList.push(dx);
     dxFilter();
-    if (dxCalculated > 0.03) {
+    //console.log(dxCalculated);
+    if (dxCalculated > x_thresh) {
         xhigh = true;
     } else {
         xhigh = false;
     }
     if (xhigh != xprevious) {
+        console.log("x");
         x_zcm++;
     }
     xprevious = xhigh;
@@ -489,12 +502,13 @@ var yChange = (v) => {
     ysample_counter++;
     dyList.push(dy);
     dyFilter();
-    if (dyCalculated > 0.03) {
+    if (dyCalculated > y_thresh) {
         yhigh = true;
     } else {
         yhigh = false;
     }
     if (yhigh != yprevious) {
+      console.log("y");
         y_zcm++;
     }
     yprevious = yhigh;
@@ -506,12 +520,13 @@ var zChange = (v) => {
     zsample_counter++;
     dzList.push(dz);
     dzFilter();
-    if (dzCalculated > 0.03) {
+    if (dzCalculated > z_thresh) {
         zhigh = true;
     } else {
         zhigh = false;
     }
     if (zhigh != zprevious) {
+      console.log("z");
         z_zcm++;
     }
     zprevious = zhigh;
@@ -520,7 +535,7 @@ var zChange = (v) => {
 //---------Business Logic Functions-----
 
 var bufferZCM = () => {
-    zcm = zcm * 2;
+    //zcm = zcm * 2;
     ZCMData.push(zcm);
     if (ZCMData.length > 7) {
         ZCMData.shift();
@@ -638,6 +653,7 @@ var zcmLoop = () => {
     zcmCalculated();
     isAsleep();
     zcmFile.write(dbSleep + "," + zcm + "," + bpm + "," + steps + "\r\n");
+    console.log("x "+x_zcm+" y "+y_zcm+" z "+z_zcm);  
     resetDataVariables();
     console.log("in ZCM");
 }), 60000);};
@@ -650,17 +666,19 @@ E.showMessage("ZCM session ended \n\Swipe left for menu");
 };
 
 var zcmStart = () => {
-E.showMenu();
-if(!isRunning) {
-  createFile();
-Bangle.setStepCount(0);
-isRunning = true;
-zcmLoop();
-}
-else {
-E.showMessage("ZCM restarted");
-  zcmLoop();
-}};
+    console.log("Bangle demo version 1.2");
+    E.showMenu();
+    createFile();
+    Bangle.setStepCount(0);
+    if(!isRunning) {
+    isRunning = true;
+    zcmLoop();
+    }
+    else {
+    E.showMessage("ZCM restarted");
+      zcmLoop();
+    }
+};
 
 
 //--------------------------------------
@@ -720,6 +738,16 @@ function startPVT() {
 
 //CLOCK
 
+function stepsCheckForReset(){
+    var d = new Date();
+    var h = d.getHours();
+    var  m = d.getMinutes();
+    var s = d.getSeconds();
+    //console.log("checking time");
+    if((h==2)&&(m==0)&&(s==0)){
+        Bangle.setStepCount(0);
+    }
+}
 
 var draw = () => {
   // work out how to display the current time
@@ -766,7 +794,7 @@ const X = 130, Y = 110;
 Bangle.loadWidgets();
 Bangle.drawWidgets();
 clear();
- 
+setInterval(stepsCheckForReset,1000); 
 secondInterval = setInterval(draw, 1000);
 zcmStart();
 
