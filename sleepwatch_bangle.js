@@ -3,6 +3,7 @@
 var Layout = require("Layout");
 var heatShrink = require("heatshrink");
 let file = null;
+let Version = "Version 1.21";
 //------------------------------------
 
 
@@ -490,7 +491,7 @@ var xChange = (v) => {
         xhigh = false;
     }
     if (xhigh != xprevious) {
-        console.log("x");
+       // console.log("x");
         x_zcm++;
     }
     xprevious = xhigh;
@@ -508,7 +509,7 @@ var yChange = (v) => {
         yhigh = false;
     }
     if (yhigh != yprevious) {
-      console.log("y");
+     //console.log("y");
         y_zcm++;
     }
     yprevious = yhigh;
@@ -526,7 +527,7 @@ var zChange = (v) => {
         zhigh = false;
     }
     if (zhigh != zprevious) {
-      console.log("z");
+      //console.log("z");
         z_zcm++;
     }
     zprevious = zhigh;
@@ -615,6 +616,7 @@ var createFile = () => {
         zcmGetStartDateForExport();
         zcmGetStartTrialTimeForExport();
         zcmFile = require("Storage").open("ZCM.txt", "w");
+        zcmFile.write(Version);
         zcmFile.write("Start of Test: " + zcmRecordDateOfStart + "," + zcmRecordTimeOfStart + "\r\n");
         zcmFile.write("Sleep , ZCM , BPM , Steps \r\n");
 };
@@ -653,9 +655,9 @@ var zcmLoop = () => {
     zcmCalculated();
     isAsleep();
     zcmFile.write(dbSleep + "," + zcm + "," + bpm + "," + steps + "\r\n");
-    console.log("x "+x_zcm+" y "+y_zcm+" z "+z_zcm);  
+    ///console.log("x "+x_zcm+" y "+y_zcm+" z "+z_zcm);  
     resetDataVariables();
-    console.log("in ZCM");
+    //console.log("in ZCM");
 }), 60000);};
 
 var zcmEnd = () => {
@@ -666,7 +668,7 @@ E.showMessage("ZCM session ended \n\Swipe left for menu");
 };
 
 var zcmStart = () => {
-    console.log("Bangle demo version 1.2");
+    //console.log("Bangle demo version 1.2");
     E.showMenu();
     createFile();
     Bangle.setStepCount(0);
@@ -769,6 +771,8 @@ var draw = () => {
   // pad the date - this clears the background if the date were to change length
   var dateStr = "    "+require("locale").date(d)+"    ";
   g.drawString(dateStr, g.getWidth()/2, Y+15, true /*clear background*/);
+  g.setFont("Vector12");
+  g.drawString(Version,g.getWidth()/2, g.getHeight-15,false);
 };
    
 function clockDisplay_enable(){
@@ -828,6 +832,10 @@ function zcmDl() {
     }
 }
 
+function test(){
+  g.clear();
+  Bluetooth.print("hello");
+}
 function pvtDl() {
 
     // open zcm file
