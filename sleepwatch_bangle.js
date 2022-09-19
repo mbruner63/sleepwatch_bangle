@@ -3,7 +3,7 @@
 var Layout = require("Layout");
 var heatShrink = require("heatshrink");
 let file = null;
-let Version = "Version 1.22";
+let Version = "Version 1.23";
 //------------------------------------
 
 
@@ -31,7 +31,7 @@ let showClock = false;
 let menuDisabled = false;
 
 var loopSpeed = 10;
-var stopwatchSpeed = 5;
+var stopwatchSpeed = 10;
 var minimumTargetDisplayTime = 2;
 var maximumTargetDisplayTime = 10;
 var numberOfSecondsTargetsShouldDisplay = 60;
@@ -66,7 +66,7 @@ countDown().then(() => onSideButtonPressed());
 
 var displayCompleteMessage = () => {
 clear();
-E.showMessage("Test complete\n\nSwipe left for menu");
+E.showMessage("Test complete\n\n");
 };
 
 var countDown = () => new Promise((resolve, reject) => {
@@ -205,19 +205,19 @@ createDataHeader = () => {
     file.write("\r\n\"PVT DATA\" \r\n");
    file.write("\"STUDY: \", \"STUDY\" \r\n");
     file.write("\"RATING PRE, POST TRIAL: \",BEFORE RATING,POST TRIAL\r\n");
-    file.write("\"E. INITIALS:\", \"E_Initials\"\r\n");
-    file.write("\"S. INITIALS:\", \"S_Initials\"\r\n");
-    file.write("\"S. ID NUMBER:\", S_ID\r\n");
-    file.write("\"TRIAL NUMBER:\", Trial_Number \r\n");
+    file.write("\"E. INITIALS:\", \"JKB\"\r\n");
+    file.write("\"S. INITIALS:\", \"MLB\"\r\n");
+    file.write("\"S. ID NUMBER:\", 8888\r\n");
+    file.write("\"TRIAL NUMBER:\", 1 \r\n");
     file.write("\"TRIAL DATE:\", \"" + recordDateOfStart + "\"\r\n");
     file.write("\"TRIAL TIME:\", \"" + recordTimeOfStart + "\" \r\n");
-    file.write("\"ISI MIN (ms):\", ISI_Min  \r\n");
-    file.write("\"ISI MAX (ms):\", ISI_Max  \r\n");
+    file.write("\"ISI MIN (ms):\", 2000  \r\n");
+    file.write("\"ISI MAX (ms):\", 10000  \r\n");
     file.write(
         "\"TRIAL LENGTH (s):\", " + numberOfSecondsTargetsShouldDisplay +" \r\n");
     file.write("\"TASK:\", \"V\" \r\n");
     file.write("\"HAND: \",\"R\" \r\n");
-    file.write("\"PVT S/N:\", PVT_Serial_Num\r\n");
+    file.write("\"PVT S/N:\", 0001\r\n");
 };
 
 //--------------------------------------
@@ -267,7 +267,7 @@ return;
 
 clear();
 isImageCurrentlyBeingDisplayed = false;
-elapsedSecondsForStopwatch -= 25;
+//elapsedSecondsForStopwatch -= 25;//
 if (isFalseStart()) {
 falseStart();
 return;
@@ -338,7 +338,7 @@ onReactionGameCompleted();
 
 //---------Bangle.JS Hardware Events----
 
-Bangle.on('touch', () => {
+/*Bangle.on('touch', () => {
 
 onScreenTouched();
 });
@@ -348,7 +348,7 @@ Bangle.on('swipe', function(direction) {
 if (menuDisabled == false) {
 menuMain();
 }
-});
+});*/
 
 //--------------------------------------
 
@@ -708,16 +708,15 @@ var btn;
 function exitMenu(){
   clockDisplay_enable();
     swipe_enabled = false;
-
     g.clear();
-
   onMainMenu = false;
   E.showMenu();
 }
 
 function menuMain() {
-  swipe_enabled = false;
   onMainMenu = true;
+  showClock = true;
+  swipe_enabled = false;
   clockDisplay_disable();
   E.showMenu({
     "": { title: /*LANG*/"Main Menu" },
@@ -809,8 +808,6 @@ require("Font7x11Numeric7Seg").add(Graphics);
 const X = 130, Y = 110;
 
 
-
-
 Bangle.loadWidgets();
 Bangle.drawWidgets();
 clear();
@@ -819,16 +816,26 @@ secondInterval = setInterval(draw, 1000);
 zcmStart();
 
 setWatch(() => {
-  if (showClock & onMainMenu) {
+
+  if (showClock && onMainMenu && !menuDisabled) {
+
+    exitMenu();
     showClock = false;
-    g.clear();
-    secondInterval = setInterval(draw, 1000);
-  } else {
+  } 
+  else if (menuDisabled) { 
+
+  onScreenTouched();
+  } else { 
+
+  menuMain();
   showClock=true;
-  clearInterval(secondInterval);
-  g.clear();
- menuMain();}
+  }
 }, BTN1, {repeat:true});
+
+
+
+
+
 //(ON BUTTON PRESS) menuMain();
 //launchClock();
 
