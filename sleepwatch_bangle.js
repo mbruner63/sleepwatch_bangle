@@ -3,7 +3,7 @@
 var Layout = require("Layout");
 var heatShrink = require("heatshrink");
 let file = null;
-let Version = "Version 1.23";
+let Version = "Version 1.24";
 //------------------------------------
 
 
@@ -159,7 +159,7 @@ timeData.push(dateDataTaken);
 if (elapsedSecondsForStopwatch > 1) {
 g.setFontAlign(0,0);
 g.setColor("#000000");
-g.setFont("Vector",20);
+g.setFont("Vector",30);
 g.drawString(elapsedSecondsForStopwatch.toString(), 88, 88);
 }
 };
