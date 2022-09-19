@@ -698,6 +698,7 @@ function setBacklight() {
     var  m = d.getMinutes();
     var s = d.getSeconds();
     //console.log("checking time");
+    console.log(h);
    if ((h > 20) || (h < 7)) { Bangle.setLCDBrightness(0); } else {Bangle.setLCDBrightness(1);}}
 
 
@@ -766,7 +767,7 @@ function stepsCheckForReset(){
 }
 
 var draw = () => {
-  setBacklight();
+  //setBacklight();
   // work out how to display the current time
   var d = new Date();
   var h = d.getHours(), m = d.getMinutes();
