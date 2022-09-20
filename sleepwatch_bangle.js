@@ -620,7 +620,7 @@ var createFile = () => {
         zcmGetStartDateForExport();
         zcmGetStartTrialTimeForExport();
         zcmFile = require("Storage").open("ZCM.txt", "w");
-        zcmFile.write(Version);
+        zcmFile.write(Version+"\r\n");
         zcmFile.write("Start of Test: " + zcmRecordDateOfStart + "," + zcmRecordTimeOfStart + "\r\n");
         zcmFile.write("Sleep , ZCM , BPM , Steps \r\n");
 };
@@ -848,11 +848,13 @@ function zcmDl() {
     var zcmReadFile = require("Storage").open("ZCM.txt", "r");
     // read file lines
     var l = zcmReadFile.readLine();
+    Bluetooth.print('<');
     while (l !== undefined) {
         // send out bluetooth
         Bluetooth.print(l);
         l = zcmReadFile.readLine();
     }
+    Bluetooth.print('>');
 }
 
 function test(){
@@ -864,10 +866,12 @@ function pvtDl() {
     // open zcm file
     var pvtReadFile = require("Storage").open("demo.pvt", "r");
     // read file lines
+    Bluetooth.print('<');
     var l = pvtReadFile.readLine();
     while (l !== undefined) {
         // send out bluetooth
         Bluetooth.print(l);
         l = pvtReadFile.readLine();
     }
+    Bluetooth.print('<');
 }
