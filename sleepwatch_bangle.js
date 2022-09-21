@@ -3,7 +3,7 @@
 var Layout = require("Layout");
 var heatShrink = require("heatshrink");
 let file = null;
-let Version = "Version 1.24";
+let Version = "Version 1.25";
 //------------------------------------
 
 
