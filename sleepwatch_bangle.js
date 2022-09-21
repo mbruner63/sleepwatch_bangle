@@ -67,6 +67,7 @@ countDown().then(() => onSideButtonPressed());
 var displayCompleteMessage = () => {
 clear();
 E.showMessage("Test complete\n\n");
+Bangle.setLCDTimeout(10);
 };
 
 var countDown = () => new Promise((resolve, reject) => {
