@@ -849,13 +849,13 @@ function zcmDl() {
     var zcmReadFile = require("Storage").open("ZCM.txt", "r");
     // read file lines
     var l = zcmReadFile.readLine();
-    Bluetooth.print('<');
+    Bluetooth.print('{');
     while (l !== undefined) {
         // send out bluetooth
         Bluetooth.print(l);
         l = zcmReadFile.readLine();
     }
-    Bluetooth.print('>');
+    Bluetooth.print('}');
 }
 
 function test(){
@@ -867,12 +867,12 @@ function pvtDl() {
     // open zcm file
     var pvtReadFile = require("Storage").open("demo.pvt", "r");
     // read file lines
-    Bluetooth.print('<');
+    Bluetooth.print('{');
     var l = pvtReadFile.readLine();
     while (l !== undefined) {
         // send out bluetooth
         Bluetooth.print(l);
         l = pvtReadFile.readLine();
     }
-    Bluetooth.print('<');
+    Bluetooth.print('}');
 }
