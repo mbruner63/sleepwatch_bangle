@@ -3,7 +3,7 @@
 var Layout = require("Layout");
 var heatShrink = require("heatshrink");
 let file = null;
-let Version = "Version 1.25";
+let Version = "Version 1.26";
 //------------------------------------
 
 
@@ -682,9 +682,12 @@ var zcmStart = () => {
     zcmLoop();
     }
     else {
-    E.showMessage("ZCM restarted");
+    //E.showMessage("ZCM restarted");
       zcmLoop();
     }
+    Bluetooth.print('{');
+    Bluetooth.print('}');
+
 };
 
 
