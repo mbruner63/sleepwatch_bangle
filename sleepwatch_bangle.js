@@ -593,6 +593,10 @@ var isAsleep = () => {
             sleepTank = sleepTank + 0.2;
             checkSleepTank();
         }
+    }else{
+        dbSleep = 0; // awake
+        sleepTank = sleepTank - 0.1;
+        checkSleepTank();
     }
     epoch++;
 };
@@ -603,6 +607,7 @@ if (sleepTank >= 100) {
 } else if (sleepTank <= 0) {
   sleepTank = 0;
 }
+  console.log(sleepTank);
 };
 
 
@@ -804,7 +809,7 @@ var draw = () => {
 };
 
 var calculateSleepTank = () => {
-  let textColor = '#00FF00';
+  let textColor = '#008000';
   
   if (sleepTank > 70){ 
     textColor = '#008000'; 
@@ -813,8 +818,11 @@ var calculateSleepTank = () => {
     textColor = '#FF0000'; }
 
   g.setColor(textColor);
-  g.setFont("Vector12", 12);
-  g.drawString(sleepTank+"%",18, Y+55 ,false);
+  //g.setFont("Vector12", 8);
+  g.setFont12x20(2);
+  g.drawString(sleepTank+"%",50, Y-75,false);
+ 
+  
 };
    
 function clockDisplay_enable(){
