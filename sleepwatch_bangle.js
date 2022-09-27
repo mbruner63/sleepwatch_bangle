@@ -4,6 +4,7 @@ var Layout = require("Layout");
 var heatShrink = require("heatshrink");
 let file = null;
 let Version = "Version 1.26";
+var sleepTank = 100;
 //------------------------------------
 
 
@@ -340,12 +341,9 @@ onReactionGameCompleted();
 //---------Bangle.JS Hardware Events----
 
 /*Bangle.on('touch', () => {
-
 onScreenTouched();
 });
-
 Bangle.on('swipe', function(direction) {
-
 if (menuDisabled == false) {
 menuMain();
 }
@@ -588,12 +586,25 @@ var isAsleep = () => {
         sleepCalculations();
         if (dbSleep > 1) {
             dbSleep = 0; // awake
+            sleepTank = sleepTank - 0.1;
+            checkSleepTank();
         } else {
             dbSleep = 1; // Asleep
+            sleepTank = sleepTank + 0.2;
+            checkSleepTank();
         }
     }
     epoch++;
 };
+
+var checkSleepTank = () => {
+if (sleepTank >= 100) {
+  sleepTank = 100;
+} else if (sleepTank <= 0) {
+  sleepTank = 0;
+}
+};
+
 
 var calculateBestBpm = (bmp) => {
         if (bpm > bpmMax) {
@@ -673,7 +684,6 @@ E.showMessage("ZCM session ended \n\Swipe left for menu");
 };
 
 var zcmStart = () => {
-    //console.log("Bangle demo version 1.2");
     E.showMenu();
     createFile();
     Bangle.setStepCount(0);
@@ -750,7 +760,6 @@ function menuPVT() {
 
 function startPVT() {
   g.clear(1);
-  Bangle.drawWidgets();
   g.reset();
   displayWelcomeMessage();
 }
@@ -789,9 +798,23 @@ var draw = () => {
   g.setFontAlign(0,0); // align center bottom
   // pad the date - this clears the background if the date were to change length
   var dateStr = "    "+require("locale").date(d)+"    ";
-  g.drawString(dateStr, g.getWidth()/2, Y+15, true /*clear background*/);
+  g.drawString(dateStr, g.getWidth()/2, Y+15, true);
+  calculateSleepTank();
+  Bangle.drawWidgets();
+};
+
+var calculateSleepTank = () => {
+  let textColor = '#008000';
+  
+  if (sleepTank > 70){ 
+    textColor = '#008000'; 
+  } else if ( sleepTank > 40) { 
+    textColor = '#FFC300'; } else { 
+    textColor = '#FF0000'; }
+
+  g.setColor(textColor);
   g.setFont("Vector12", 8);
-  g.drawString(Version,g.getWidth()/2, Y+50 ,false);
+  g.drawString(sleepTank+"%",18, Y+55 ,false);
 };
    
 function clockDisplay_enable(){
@@ -812,9 +835,9 @@ require("Font7x11Numeric7Seg").add(Graphics);
 const X = 130, Y = 110;
 
 
-Bangle.loadWidgets();
-Bangle.drawWidgets();
 clear();
+ Bangle.loadWidgets();
+ Bangle.drawWidgets();
 setInterval(stepsCheckForReset,1000); 
 secondInterval = setInterval(draw, 1000);
 zcmStart();
@@ -846,7 +869,7 @@ setWatch(() => {
 
 //BLUETOOTH
 
-function zcmDl() {
+ffunction zcmDl() {
 
     // open zcm file
     var zcmReadFile = require("Storage").open("ZCM.txt", "r");
