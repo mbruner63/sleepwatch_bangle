@@ -3,8 +3,10 @@
 var Layout = require("Layout");
 var heatShrink = require("heatshrink");
 let file = null;
-let Version = "Version 1.26";
-var sleepTank = 100;
+let Version = "Version 1.27";
+var sleepTank = 99.9;
+var st_wake_step = 0.0694;
+var st_sleep_step = 0.2083;
 //------------------------------------
 
 
@@ -540,7 +542,7 @@ var zChange = (v) => {
 
 var bufferZCM = () => {
     //zcm = zcm * 2;
-    ZCMData.push(zcm);
+    ZCMData.push((zcm*2.7));
     if (ZCMData.length > 7) {
         ZCMData.shift();
     }
@@ -586,16 +588,16 @@ var isAsleep = () => {
         sleepCalculations();
         if (dbSleep > 1) {
             dbSleep = 0; // awake
-            sleepTank = sleepTank - 0.1;
+            sleepTank = sleepTank - st_wake_step;
             checkSleepTank();
         } else {
             dbSleep = 1; // Asleep
-            sleepTank = sleepTank + 0.2;
+            sleepTank = sleepTank + st_sleep_step;
             checkSleepTank();
         }
     }else{
         dbSleep = 0; // awake
-        sleepTank = sleepTank - 0.1;
+        sleepTank = sleepTank - st_wake_step;
         checkSleepTank();
     }
     epoch++;
@@ -607,7 +609,7 @@ if (sleepTank >= 100) {
 } else if (sleepTank <= 0) {
   sleepTank = 0;
 }
-  console.log(sleepTank);
+  //console.log(sleepTank);
 };
 
 
@@ -630,7 +632,7 @@ var resetDataVariables = () => {
 
 var zcmCalculated = () => {
 zcm = z_zcm + x_zcm + y_zcm;
-    ZCMData.push(zcm);
+    //ZCMData.push(zcm);
     bufferZCM();};
 
 var createFile = () => {
@@ -688,7 +690,16 @@ isRunning = false;
 E.showMessage("ZCM session ended \n\Swipe left for menu");
 };
 
+function sleepTankStart(){
+  var d = new Date();
+  startTime = (d.getHours()*60)+ d.getMinutes();
+  //console.log(startTime);
+  if(startTime > 360){
+    sleepTank -= ((startTime-360)*st_wake_step);
+  }
+}
 var zcmStart = () => {
+    sleepTankStart();
     E.showMenu();
     createFile();
     Bangle.setStepCount(0);
@@ -820,7 +831,10 @@ var calculateSleepTank = () => {
   g.setColor(textColor);
   g.setFont("Vector:24", 24);
   //g.setFont12x20(1.75);
-  g.drawString(sleepTank+"%",35, Y-75,false);
+  //g.drawString("    ",35,Y-75,false);
+  g.clearRect(0,Y-100,120, Y-60);
+  var result = Math.round(sleepTank*10)/10;
+  g.drawString(result+"%",40, Y-75,false);
  
   
 };
