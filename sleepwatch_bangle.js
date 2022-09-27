@@ -818,9 +818,9 @@ var calculateSleepTank = () => {
     textColor = '#FF0000'; }
 
   g.setColor(textColor);
-  //g.setFont("Vector12", 8);
-  g.setFont12x20(2);
-  g.drawString(sleepTank+"%",50, Y-75,false);
+  g.setFont("Vector:24", 24);
+  //g.setFont12x20(1.75);
+  g.drawString(sleepTank+"%",35, Y-75,false);
  
   
 };
