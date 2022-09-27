@@ -804,7 +804,7 @@ var draw = () => {
 };
 
 var calculateSleepTank = () => {
-  let textColor = '#008000';
+  let textColor = '#00FF00';
   
   if (sleepTank > 70){ 
     textColor = '#008000'; 
@@ -813,7 +813,7 @@ var calculateSleepTank = () => {
     textColor = '#FF0000'; }
 
   g.setColor(textColor);
-  g.setFont("Vector12", 8);
+  g.setFont("Vector12", 12);
   g.drawString(sleepTank+"%",18, Y+55 ,false);
 };
    
@@ -869,7 +869,7 @@ setWatch(() => {
 
 //BLUETOOTH
 
-ffunction zcmDl() {
+function zcmDl() {
 
     // open zcm file
     var zcmReadFile = require("Storage").open("ZCM.txt", "r");
