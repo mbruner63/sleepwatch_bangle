@@ -823,9 +823,9 @@ var draw = () => {
 var calculateSleepTank = () => {
   let textColor = '#008000';
   
-  if (sleepTank > 70){ 
+  if (sleepTank > 60){ 
     textColor = '#008000'; 
-  } else if ( sleepTank > 40) { 
+  } else if ( sleepTank > 20) { 
     textColor = '#FFC300'; } else { 
     textColor = '#FF0000'; }
 
