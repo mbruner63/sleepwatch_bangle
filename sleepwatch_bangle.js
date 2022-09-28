@@ -3,7 +3,7 @@
 var Layout = require("Layout");
 var heatShrink = require("heatshrink");
 let file = null;
-let Version = "Version 1.27";
+let Version = "Version 1.29";
 var sleepTank = 99.9;
 var st_wake_step = 0.0694;
 var st_sleep_step = 0.2083;
@@ -712,9 +712,6 @@ var zcmStart = () => {
     //E.showMessage("ZCM restarted");
       zcmLoop();
     }
-    Bluetooth.print('{');
-    Bluetooth.print('}');
-
 };
 
 
@@ -908,6 +905,12 @@ function zcmDl() {
     Bluetooth.print('}');
 }
 
+
+function restartZCM(){
+  Bluetooth.print('{');
+  createFile();
+  Bluetooth.print('}');
+}
 function test(){
   g.clear();
   Bluetooth.print("hello");
