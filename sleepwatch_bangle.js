@@ -417,10 +417,10 @@ var dzSum;
 var dzCalculated;
 var dzList = [];
 var z_zcm = 0;
-var window_size = 4;
-var x_thresh = 0.025;
-var y_thresh = 0.03;
-var z_thresh = 0.03;
+var window_size = 3;
+var x_thresh = 0.005;
+var y_thresh = 0.005;
+var z_thresh = 0.01;
 
 
 var bpmMax = 0;
@@ -542,7 +542,8 @@ var zChange = (v) => {
 
 var bufferZCM = () => {
     //zcm = zcm * 2;
-    ZCMData.push((zcm*2.7));
+    //ZCMData.(push((zcm*2.7));
+    ZCMData.push(zcm);
     if (ZCMData.length > 7) {
         ZCMData.shift();
     }
@@ -641,7 +642,7 @@ var createFile = () => {
         zcmFile = require("Storage").open("ZCM.txt", "w");
         zcmFile.write(Version+"\r\n");
         zcmFile.write("Start of Test: " + zcmRecordDateOfStart + "," + zcmRecordTimeOfStart + "\r\n");
-        zcmFile.write("Sleep , ZCM , BPM , Steps \r\n");
+        zcmFile.write("Sleep , ZCM , BPM , Steps, SleepTank \r\n");
 };
 
 
@@ -652,7 +653,7 @@ var createFile = () => {
 
 //---------Hardware-------------------
 
-Bangle.setHRMPower(true);
+//Bangle.setHRMPower(true);
 Bangle.setLCDBrightness(1);
 
 Bangle.on('accel', (a) => {
@@ -677,8 +678,8 @@ var zcmLoop = () => {
     steps = Bangle.getStepCount();
     zcmCalculated();
     isAsleep();
-    zcmFile.write(dbSleep + "," + zcm + "," + bpm + "," + steps + "\r\n");
-    ///console.log("x "+x_zcm+" y "+y_zcm+" z "+z_zcm);  
+    zcmFile.write(dbSleep + "," + zcm + "," + bpm + "," + steps + ","+sleepTank+"\r\n");
+    //console.log("x "+x_zcm+" y "+y_zcm+" z "+z_zcm);  
     resetDataVariables();
     //console.log("in ZCM");
 }), 60000);};
@@ -699,7 +700,7 @@ function sleepTankStart(){
   }
 }
 var zcmStart = () => {
-    sleepTankStart();
+    
     E.showMenu();
     createFile();
     Bangle.setStepCount(0);
@@ -728,7 +729,7 @@ function setBacklight() {
     var  m = d.getMinutes();
     var s = d.getSeconds();
     //console.log("checking time");
-    console.log(h);
+   // console.log(h);
    if ((h > 20) || (h < 7)) { Bangle.setLCDBrightness(0); } else {Bangle.setLCDBrightness(1);}}
 
 
@@ -858,6 +859,7 @@ const X = 130, Y = 110;
 
 
 clear();
+sleepTankStart();
  Bangle.loadWidgets();
  Bangle.drawWidgets();
 setInterval(stepsCheckForReset,1000); 
