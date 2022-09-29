@@ -3,7 +3,7 @@
 var Layout = require("Layout");
 var heatShrink = require("heatshrink");
 let file = null;
-let Version = "Version 1.29";
+let Version = "Version 1.30";
 var sleepTank = 99.9;
 var st_wake_step = 0.0694;
 var st_sleep_step = 0.2083;
@@ -797,22 +797,20 @@ var draw = () => {
   // work out how to display the current time
   var d = new Date();
   var h = d.getHours(), m = d.getMinutes();
-  var time = (" "+h).substr(-2) + ":" + ("0"+m).substr(-2);
+  var time = ("0"+h).substr(-2) + ":" + ("0"+m).substr(-2);
   // Reset the state of the graphics library
   g.reset();
   // draw the current time (4x size 7 segment)
-  g.setFont("7x11Numeric7Seg",4);
-  g.setFontAlign(1,1); // align right bottom
-  g.drawString(time, X, Y, true /*clear background*/);
-  // draw the seconds (2x size 7 segment)
-  g.setFont("7x11Numeric7Seg",2);
-  g.drawString(("0"+d.getSeconds()).substr(-2), X+30, Y, true /*clear background*/);
-  // draw the date, in a normal font
-  g.setFont("6x8");
+  g.setFont("Vector",53);
+  g.setFontAlign(0,0); // 
+  g.drawString(time, g.getWidth()/2, g.getHeight()/2, true /*clear background*/);
+  g.setFont("Vector",18);
   g.setFontAlign(0,0); // align center bottom
   // pad the date - this clears the background if the date were to change length
   var dateStr = "    "+require("locale").date(d)+"    ";
   g.drawString(dateStr, g.getWidth()/2, Y+15, true);
+  g.setFont("Vector12", 10);
+  g.drawString(Version,g.getWidth()/2, Y+50 ,false);
   calculateSleepTank();
   Bangle.drawWidgets();
 };
