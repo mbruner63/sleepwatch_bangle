@@ -3,7 +3,7 @@
 var Layout = require("Layout");
 var heatShrink = require("heatshrink");
 let file = null;
-let Version = "Version 1.30";
+let Version = "Version 1.31";
 var sleepTank = 99.9;
 var st_wake_step = 0.0694;
 var st_sleep_step = 0.2083;
@@ -684,12 +684,12 @@ var zcmLoop = () => {
     //console.log("in ZCM");
 }), 60000);};
 
-var zcmEnd = () => {
+/*var zcmEnd = () => {
 E.showMenu();
 clearInterval(mainZcmLoop);
 isRunning = false;
 E.showMessage("ZCM session ended \n\Swipe left for menu");
-};
+};*/
 
 function sleepTankStart(){
   var d = new Date();
@@ -700,7 +700,6 @@ function sleepTankStart(){
   }
 }
 var zcmStart = () => {
-    
     E.showMenu();
     createFile();
     Bangle.setStepCount(0);
@@ -709,8 +708,8 @@ var zcmStart = () => {
     zcmLoop();
     }
     else {
-    //E.showMessage("ZCM restarted");
-      zcmLoop();
+      E.showMessage("ZCM restarted\nPress button to continue");
+      restartZCM();
     }
 };
 
